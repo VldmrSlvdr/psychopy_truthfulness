@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>平均ライン付きの散布図</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="chart-container" style="width: 600px; height: 300px;"></div>
+
+<script>
+    // Data for the scatter plot
+    var data = [{
+        x: [1, 2, 3, 4, 5, 6],
+        y: [90, 95, 97, 100, 91, 85],
+        mode: 'markers+text',
+        type: 'scatter',
+        text: ['90', '95', '97', '100', '91', '85'],
+        textposition: 'top center',
+        marker: { size: 10 }
+    }];
+
+    // Layout for the plot
+    var layout = {
+        title: '平均ライン付きの散布図',
+        shapes: [
+            {
+                type: 'line',
+                x0: 0,
+                x1: 6,
+                y0: 92.6,
+                y1: 92.6,
+                line: {
+                    color: 'blue',
+                    width: 2
+                }
+            }
+        ],
+        annotations: [
+            {
+                x: 6.5,
+                y: 92.6,
+                xref: 'x',
+                yref: 'y',
+                text: '平均: 92.6',
+                showarrow: true,
+                arrowhead: 7,
+                ax: -40,
+                ay: 0
+            }
+        ],
+        xaxis: { range: [0, 7] },
+        yaxis: { range: [80, 105] }
+    };
+
+    // Configuration for the animation
+    var config = {
+        responsive: true,
+        displayModeBar: false
+    };
+
+    // Render the plot
+    Plotly.newPlot('chart-container', data, layout, config);
+
+    // Animate the elements
+    function animateElements() {
+        // Display the average line and label
+        var avgLine = document.querySelector('.average-line');
+        var avgLabel = document.querySelector('.average-label');
+        avgLine.style.display = 'block';
+        avgLabel.style.display = 'block';
+        
+        // Animate data points
+        Plotly.animate('chart-container', {
+            data: [{ x: [1, 2, 3, 4, 5, 6], y: [90, 95, 97, 100, 91, 85] }],
+            traces: [0],
+            layout: {}
+        }, {
+            transition: {
+                duration: 500,
+                easing: 'cubic-in-out'
+            },
+            frame: {
+                duration: 500,
+                redraw: false
+            }
+        });
+    }
+
+    // Wait for the window to load, then animate
+    window.onload = function() {
+        setTimeout(animateElements, 200);
+    };
+</script>
+
+</body>
+</html>
